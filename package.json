@@ -1,0 +1,51 @@
+{
+  "name": "@me9rez/dem-dynamic-terrain",
+  "type": "module",
+  "version": "0.0.1",
+  "packageManager": "pnpm@10.6.1",
+  "description": "使用 GDAL 制作地形瓦片，支持 mapbox 和 terrarium 两种编码输出格式",
+  "author": "me9rez",
+  "license": "MIT",
+  "keywords": [
+    "dem",
+    "terrain",
+    "terrain-generator",
+    "gdal",
+    "gdal-async",
+    "mapbox-gl",
+    "maplibre-gl"
+  ],
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "dem-dynamic-terrain": "./dist/cli.js"
+  },
+  "engines": {
+    "node": ">=22.5"
+  },
+  "scripts": {
+    "test": "tsx ./test/index.ts",
+    "lint": "eslint",
+    "lint:fix": "eslint --fix",
+    "build": "tsx ./rslib.config.ts"
+  },
+  "dependencies": {
+    "commander": "^13.1.0",
+    "gdal-async": "^3.10.1",
+    "tinypool": "^1.0.2"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^4.7.0",
+    "@microsoft/api-extractor": "^7.51.1",
+    "@rslib/core": "^0.5.3",
+    "@types/node": "^22.13.9",
+    "eslint": "9.21.0",
+    "tsx": "^4.19.3"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "gdal-async"
+    ]
+  }
+}
