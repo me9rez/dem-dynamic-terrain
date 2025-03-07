@@ -30,7 +30,7 @@
 从网络全局安装，成为命令行工具：
 
 ```bash
-pnpm add dem2terrain -g
+pnpm add https://github.com/me9rez/dem-dynamic-terrain.git#main -g
 ```
 
 源码安装（先将当前目录定位至工程根目录，且明白什么是 link 命令）：
@@ -63,9 +63,9 @@ npm run server
 
 当前支持作为命令行使用：
 
-```plaintext
-> dem2terrain --help
-Usage: dem2terrain [options]
+```bash
+> dem-dynamic-terrain --help
+Usage: dem-dynamic-terrain [options]
 
 使用 GDAL 制作地形瓦片，支持 mapbox 和 terrarium 两种编码输出格式，当前仅输出 PNG 容器格式。
 
@@ -98,7 +98,7 @@ Options:
 
 * 方式1：通过命令行参数执行任务
 ```bash
-dem2terrain -z 4-15 -e terrarium -i ./ZONE.tiff -o ./output -c 1 -g 3857
+dem-dynamic-terrain -z 4-15 -e terrarium -i ./ZONE.tiff -o ./output -c 1 -g 3857
 ```
 
 * 方式2：通过配置文件执行任务
@@ -116,7 +116,7 @@ dem2terrain -z 4-15 -e terrarium -i ./ZONE.tiff -o ./output -c 1 -g 3857
 ```
 2）执行任务
 ```bash
-dem2terrain -f d://config.json
+dem-dynamic-terrain -f d://config.json
 ```
 
 ## 2.2 数据输出
@@ -126,14 +126,14 @@ dem2terrain -f d://config.json
 
 -o参数为文件目录，则以文件形式存储：
 ```bash
-dem2terrain -z 4-15 -e terrarium -i ./ZONE.tiff -o ./output -c 1 -g 3857
+dem-dynamic-terrain -z 4-15 -e terrarium -i ./ZONE.tiff -o ./output -c 1 -g 3857
 ```
 
 * 以mbtiles存储
 
 -o参数带.mbtiles扩展名，则以mbtiles形式存储：
 ```bash
-dem2terrain -z 4-15 -e terrarium -i ./ZONE.tiff -o ./output/tile.mbtiles -c 1 -g 3857
+dem-dynamic-terrain -z 4-15 -e terrarium -i ./ZONE.tiff -o ./output/tile.mbtiles -c 1 -g 3857
 ```
 
 # 3. 使用输出成果
