@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
+    "target": "es2022",
     // Enable latest features
-    "lib": ["ESNext"],
+    "lib": ["es2022"],
     "moduleDetection": "force",
     "module": "ESNext",
 

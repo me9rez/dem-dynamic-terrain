@@ -1,3 +1,4 @@
+import type { Options } from './types'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import process from 'node:process'
@@ -79,7 +80,7 @@ const logMsg = `\n>> 开始转换...
 `
 console.log(logMsg)
 
-const args = {
+const args: Options = {
   minZoom,
   maxZoom,
   epsg,
