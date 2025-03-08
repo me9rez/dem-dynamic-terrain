@@ -18,7 +18,6 @@ function mapboxDecode(color: [number, number, number]) {
     return -10000 + ((color[0] * 256 * 256 + color[1] * 256 + color[2]) * 0.1);
 }
 
-
 /**
  * Terrarium 编码
  * @param height 高程值
@@ -40,7 +39,6 @@ function terrariumEncode(height: number): [number, number, number] {
 function terrariumDecode(color: [number, number, number]) {
     return (color[0] * 256 + color[1] + color[2] / 256.0) - 32768;
 }
-
 
 /**
  * Cesium 编码
