@@ -1,12 +1,16 @@
 import type { Dataset, Driver } from 'gdal-async'
 import type { Bound } from './tile-util'
 import type { CreateInfo, Options, OverviewInfo, StatisticsInfo } from './types'
+
 import { existsSync } from 'node:fs'
 import fs from 'node:fs/promises'
 import os from 'node:os'
 import path from 'node:path'
+
 import gdal from 'gdal-async'
 import Tinypool from 'tinypool'
+
+import pkg from '../package.json'
 import { getBuildOverviewResampling, reprojectImage } from './gdal-util'
 import { getTileByCoors, ST_TileEnvelope, tileBoundMap } from './tile-util'
 import { uuid } from './util'
@@ -33,7 +37,7 @@ let tileBoundTool: Bound
  * 清理临时文件
  */
 async function recycle() {
-  if (sourceDs !== null) {
+  if (sourceDs) {
     try {
       sourceDs.close()
     }
@@ -42,7 +46,7 @@ async function recycle() {
     }
     sourceDs = null
   }
-  if (projectDs !== null) {
+  if (projectDs) {
     try {
       projectDs.close()
     }
@@ -63,7 +67,7 @@ async function recycle() {
   // 存在临时影像金字塔附属文件
   const ovrPath = `${encodePath}.ovr`
   if (existsSync(ovrPath)) {
-    await fs.rm(ovrPath)
+    await fs.rm(ovrPath, { recursive: true })
   }
 }
 
@@ -71,7 +75,7 @@ async function recycle() {
  * 重投影数据集
  */
 function reproject(ds: Dataset, epsg: number, resampling: number) {
-  const projectDatasetPath = path.join(os.tmpdir(), 'dem-dynamic-terrain', `${uuid()}.tif`)
+  const projectDatasetPath = path.join(os.tmpdir(), pkg.tempDir, `${uuid()}.tif`)
   reprojectImage(ds, projectDatasetPath, epsg, resampling)
   return projectDatasetPath
 }
@@ -177,8 +181,7 @@ async function generateTile(input: string, output: string, options: Options) {
     path: projectDs.description,
   }
 
-  // 计算切片总数
-  // 堆积任务数量
+  // 切片总数
   let pileUpCount = 0
   let miny: number | undefined
   let maxy: number | undefined
@@ -240,6 +243,7 @@ async function generateTile(input: string, output: string, options: Options) {
     for (let j = tminx; j <= tmaxx; j++) {
       // 递归创建目录
       await fs.mkdir(path.join(outputDir, tz.toString(), j.toString()), { recursive: true })
+
       for (let i = tminy; i <= tmaxy; i++) {
         const tileBound = ST_TileEnvelope(tz, j, i, buffer, tileBoundTool)
         const { rb, wb } = geoQuery(
@@ -268,7 +272,6 @@ async function generateTile(input: string, output: string, options: Options) {
       }
     }
   }
-
   console.log(`切片总数数量: ${pileUpCount}`)
   await Promise.all(jobs)
   await pool.destroy()

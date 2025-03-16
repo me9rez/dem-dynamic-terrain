@@ -73,8 +73,8 @@ function getDriverByName(driverName: string) {
  * @author freegis
  */
 function reprojectImage(src_ds: string | Dataset, reproject_path: string, t_epsg: number, resampling = 1) {
-  let s_ds
-  if (typeof (src_ds) === 'string')
+  let s_ds: Dataset
+  if (typeof src_ds === 'string')
     s_ds = gdal.open(src_ds)
   else
     s_ds = src_ds
@@ -104,8 +104,9 @@ function reprojectImage(src_ds: string | Dataset, reproject_path: string, t_epsg
   // 关闭退出
   t_ds.bands.get(1).noDataValue = s_ds.bands.get(1).noDataValue
   t_ds.close()
-  if (typeof (src_ds) === 'string')
+  if (typeof src_ds === 'string') {
     s_ds.close()
+  }
 }
 
 export {

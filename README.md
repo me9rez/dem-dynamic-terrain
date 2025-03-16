@@ -30,7 +30,7 @@
 从网络全局安装，成为命令行工具：
 
 ```bash
-pnpm add https://github.com/me9rez/dem-dynamic-terrain.git#main -g
+pnpm add @deepgis/dem-dynamic-terrain-g
 ```
 
 源码安装（先将当前目录定位至工程根目录，且明白什么是 link 命令）：
@@ -129,7 +129,7 @@ dem-dynamic-terrain -f d://config.json
 dem-dynamic-terrain -z 4-15 -e terrarium -i ./ZONE.tiff -o ./output -c 1 -g 3857
 ```
 
-* 以mbtiles存储
+* 以mbtiles存储(暂不可用)
 
 -o参数带.mbtiles扩展名，则以mbtiles形式存储：
 ```bash
