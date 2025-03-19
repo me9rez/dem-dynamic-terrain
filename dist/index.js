@@ -1,28 +1,29 @@
-import * as __WEBPACK_EXTERNAL_MODULE_fs__ from "fs";
-import * as __WEBPACK_EXTERNAL_MODULE_fs_promises_400951f8__ from "fs/promises";
-import * as __WEBPACK_EXTERNAL_MODULE_path__ from "path";
-import * as __WEBPACK_EXTERNAL_MODULE_os__ from "os";
-import * as __WEBPACK_EXTERNAL_MODULE_tinypool__ from "tinypool";
+import * as __WEBPACK_EXTERNAL_MODULE_node_fs_5ea92f0c__ from "node:fs";
+import * as __WEBPACK_EXTERNAL_MODULE_node_fs_promises_153e37e0__ from "node:fs/promises";
+import * as __WEBPACK_EXTERNAL_MODULE_node_os_74b4b876__ from "node:os";
+import * as __WEBPACK_EXTERNAL_MODULE_node_path_c5b9b54f__ from "node:path";
 import * as __WEBPACK_EXTERNAL_MODULE_gdal_async_691d88a0__ from "gdal-async";
-import * as __WEBPACK_EXTERNAL_MODULE_crypto__ from "crypto";
+import * as __WEBPACK_EXTERNAL_MODULE_tinypool__ from "tinypool";
+import * as __WEBPACK_EXTERNAL_MODULE_node_crypto_9ba42079__ from "node:crypto";
+var package_namespaceObject = JSON.parse('{"KR":"dem-dynamic-terrain"}');
 function getBuildOverviewResampling(resampling) {
     switch(resampling){
         case 1:
-            return "AVERAGE";
+            return 'AVERAGE';
         case 2:
-            return "BILINEAR";
+            return 'BILINEAR';
         case 3:
-            return "CUBIC";
+            return 'CUBIC';
         case 4:
-            return "CUBICSPLINE";
+            return 'CUBICSPLINE';
         case 5:
-            return "LANCZOS";
+            return 'LANCZOS';
         case 6:
-            return "MODE";
+            return 'MODE';
         case 7:
-            return "NEAREST";
+            return 'NEAREST';
         default:
-            return "CUBIC";
+            return 'CUBIC';
     }
 }
 function getResampling(resampling) {
@@ -52,15 +53,15 @@ function reprojectImage(src_ds, reproject_path, t_epsg, resampling = 1) {
     const t_srs = __WEBPACK_EXTERNAL_MODULE_gdal_async_691d88a0__["default"].SpatialReference.fromEPSGA(t_epsg);
     const { rasterSize, geoTransform } = __WEBPACK_EXTERNAL_MODULE_gdal_async_691d88a0__["default"].suggestedWarpOutput({
         src: s_ds,
-        s_srs: s_srs,
-        t_srs: t_srs
+        s_srs,
+        t_srs
     });
     const dataType = s_ds.bands.get(1).dataType;
     const t_driver = s_ds.driver;
     const t_ds = t_driver.create(reproject_path, rasterSize.x, rasterSize.y, s_ds.bands.count(), dataType);
     t_ds.srs = t_srs;
     t_ds.geoTransform = geoTransform;
-    let gdal_resampling = getResampling(resampling);
+    const gdal_resampling = getResampling(resampling);
     __WEBPACK_EXTERNAL_MODULE_gdal_async_691d88a0__["default"].reprojectImage({
         src: s_ds,
         dst: t_ds,
@@ -72,7 +73,7 @@ function reprojectImage(src_ds, reproject_path, t_epsg, resampling = 1) {
     t_ds.close();
     if ('string' == typeof src_ds) s_ds.close();
 }
-let tileBoundMap = new Map();
+const tileBoundMap = new Map();
 tileBoundMap.set(3857, {
     xmin: -20037508.342789244,
     ymin: -20037508.342789244,
@@ -101,18 +102,18 @@ function ST_TileEnvelope(z, x, y, offset = 0, bbox = tileBoundMap.get(3857)) {
     const tile_size = 256.0;
     const boundsWidth = bbox.xmax - bbox.xmin;
     const boundsHeight = bbox.ymax - bbox.ymin;
-    if (boundsWidth <= 0 || boundsHeight <= 0) throw new Error("Geometric bounds are too small");
+    if (boundsWidth <= 0 || boundsHeight <= 0) throw new Error('Geometric bounds are too small');
     if (z < 0 || z >= 32) throw new Error(`Invalid tile zoom value, ${z}`);
-    let worldTileSize = 0x01 << (z > 31 ? 31 : z);
+    const worldTileSize = 0x01 << (z > 31 ? 31 : z);
     if (x < 0 || x >= worldTileSize) throw new Error(`Invalid tile x value, ${x}`);
     if (y < 0 || y >= worldTileSize) throw new Error(`Invalid tile y value, ${y}`);
     const tileGeoSizeX = +boundsWidth / worldTileSize;
     const tileGeoSizeY = +boundsHeight / worldTileSize;
     const tileGeoSize = Math.max(tileGeoSizeX, tileGeoSizeY);
-    let x1 = bbox.xmin + tileGeoSize * x - tileGeoSize / tile_size * offset;
-    let x2 = bbox.xmin + tileGeoSize * (x + 1) + tileGeoSize / tile_size * offset;
-    let y1 = bbox.ymax - tileGeoSize * (y + 1) - tileGeoSize / tile_size * offset;
-    let y2 = bbox.ymax - tileGeoSize * y + tileGeoSize / tile_size * offset;
+    const x1 = bbox.xmin + tileGeoSize * x - tileGeoSize / tile_size * offset;
+    const x2 = bbox.xmin + tileGeoSize * (x + 1) + tileGeoSize / tile_size * offset;
+    const y1 = bbox.ymax - tileGeoSize * (y + 1) - tileGeoSize / tile_size * offset;
+    const y2 = bbox.ymax - tileGeoSize * y + tileGeoSize / tile_size * offset;
     return [
         x1,
         y1,
@@ -125,7 +126,7 @@ function getTileByCoors(coord, zoom, bbox = tileBoundMap.get(3857)) {
     const top = bbox.ymax;
     const _width = coord[0] - left;
     const _height = top - coord[1];
-    let worldTileSize = 0x01 << zoom;
+    const worldTileSize = 0x01 << zoom;
     const boundsWidth = bbox.xmax - bbox.xmin;
     const boundsHeight = bbox.ymax - bbox.ymin;
     const tileGeoSize = +Math.max(boundsWidth, boundsHeight) / worldTileSize;
@@ -138,15 +139,20 @@ function getTileByCoors(coord, zoom, bbox = tileBoundMap.get(3857)) {
 }
 const pool = new __WEBPACK_EXTERNAL_MODULE_tinypool__["default"]({
     filename: new URL('./create-tile.js', import.meta.url).href,
-    runtime: "child_process"
+    runtime: 'child_process'
 });
-let statistics = {
+const statistics = {
     tileCount: 0,
     completeCount: 0,
     levelInfo: {}
 };
+let sourceDs;
+let projectDs;
+let projectPath;
+let encodePath;
+let tileBoundTool;
 async function recycle() {
-    if (null !== sourceDs) {
+    if (sourceDs) {
         try {
             sourceDs.close();
         } catch (e) {
@@ -154,7 +160,7 @@ async function recycle() {
         }
         sourceDs = null;
     }
-    if (null !== projectDs) {
+    if (projectDs) {
         try {
             projectDs.close();
         } catch (e) {
@@ -162,41 +168,46 @@ async function recycle() {
         }
         projectDs = null;
     }
-    if (projectPath && (0, __WEBPACK_EXTERNAL_MODULE_fs__.existsSync)(projectPath)) {
-        await __WEBPACK_EXTERNAL_MODULE_fs_promises_400951f8__["default"].rm(projectPath, {
+    if (projectPath && (0, __WEBPACK_EXTERNAL_MODULE_node_fs_5ea92f0c__.existsSync)(projectPath)) {
+        await __WEBPACK_EXTERNAL_MODULE_node_fs_promises_153e37e0__["default"].rm(projectPath, {
             recursive: true
         });
         projectPath = null;
     }
-    if (encodePath && (0, __WEBPACK_EXTERNAL_MODULE_fs__.existsSync)(encodePath)) {
-        await __WEBPACK_EXTERNAL_MODULE_fs_promises_400951f8__["default"].rm(encodePath, {
+    if (encodePath && (0, __WEBPACK_EXTERNAL_MODULE_node_fs_5ea92f0c__.existsSync)(encodePath)) {
+        await __WEBPACK_EXTERNAL_MODULE_node_fs_promises_153e37e0__["default"].rm(encodePath, {
             recursive: true
         });
         encodePath = null;
     }
-    const ovrPath = encodePath + '.ovr';
-    if ((0, __WEBPACK_EXTERNAL_MODULE_fs__.existsSync)(ovrPath)) await __WEBPACK_EXTERNAL_MODULE_fs_promises_400951f8__["default"].rm(ovrPath);
+    const ovrPath = `${encodePath}.ovr`;
+    if ((0, __WEBPACK_EXTERNAL_MODULE_node_fs_5ea92f0c__.existsSync)(ovrPath)) await __WEBPACK_EXTERNAL_MODULE_node_fs_promises_153e37e0__["default"].rm(ovrPath, {
+        recursive: true
+    });
 }
-const reproject = (ds, epsg, resampling)=>{
-    let projectDatasetPath = __WEBPACK_EXTERNAL_MODULE_path__["default"].join(__WEBPACK_EXTERNAL_MODULE_os__["default"].tmpdir(), 'dem-dynamic-terrain', `${(0, __WEBPACK_EXTERNAL_MODULE_crypto__.randomUUID)()}.tif`);
+async function reproject(ds, epsg, resampling) {
+    const projectDatasetPath = __WEBPACK_EXTERNAL_MODULE_node_path_c5b9b54f__["default"].join(__WEBPACK_EXTERNAL_MODULE_node_os_74b4b876__["default"].tmpdir(), package_namespaceObject.KR, `${(0, __WEBPACK_EXTERNAL_MODULE_node_crypto_9ba42079__.randomUUID)()}.tif`);
+    await __WEBPACK_EXTERNAL_MODULE_node_fs_promises_153e37e0__["default"].mkdir(__WEBPACK_EXTERNAL_MODULE_node_path_c5b9b54f__["default"].dirname(projectDatasetPath), {
+        recursive: true
+    });
     reprojectImage(ds, projectDatasetPath, epsg, resampling);
     return projectDatasetPath;
-};
-const buildPyramid = (ds, minZoom, resampling)=>{
+}
+function buildPyramid(ds, minZoom, resampling) {
     const res = ds.geoTransform[1];
     const maxPixel = Math.min(ds.rasterSize.x, ds.rasterSize.y);
     let overviewNum = 1;
-    while(maxPixel / Math.pow(2, overviewNum) > 256)overviewNum++;
+    while(maxPixel / 2 ** overviewNum > 256)overviewNum++;
     let res_zoom = (tileBoundTool.xmax - tileBoundTool.xmin) / 256;
     let originZ = 0;
     while(res_zoom / 2 > res){
         res_zoom /= 2;
         originZ++;
     }
-    let overviews = [];
+    const overviews = [];
     for(let zoom = originZ - 1; zoom >= originZ - 1 - overviewNum; zoom--){
         if (zoom < minZoom) break;
-        const factor = Math.pow(2, originZ - zoom);
+        const factor = 2 ** (originZ - zoom);
         overviews.push(factor);
     }
     const buildOverviewResampling = getBuildOverviewResampling(resampling);
@@ -205,32 +216,27 @@ const buildPyramid = (ds, minZoom, resampling)=>{
         maxOverViewsZ: originZ - 1,
         minOverViewsZ: originZ - overviews.length
     };
-};
-let sourceDs;
-let projectDs;
-let projectPath;
-let encodePath;
-let tileBoundTool;
+}
 async function generateTile(input, output, options) {
     const { minZoom, maxZoom, epsg, encoding, isClean, resampling } = options;
     const tileSize = 256;
     tileBoundTool = tileBoundMap.get(epsg);
-    const isSavaMbtiles = '.mbtiles' === __WEBPACK_EXTERNAL_MODULE_path__["default"].extname(output);
+    const isSavaMbtiles = '.mbtiles' === __WEBPACK_EXTERNAL_MODULE_node_path_c5b9b54f__["default"].extname(output);
     let outputDir = output;
-    if (true === isSavaMbtiles) outputDir = __WEBPACK_EXTERNAL_MODULE_path__["default"].join(__WEBPACK_EXTERNAL_MODULE_os__["default"].tmpdir(), (0, __WEBPACK_EXTERNAL_MODULE_crypto__.randomUUID)());
+    if (true === isSavaMbtiles) outputDir = __WEBPACK_EXTERNAL_MODULE_node_path_c5b9b54f__["default"].join(__WEBPACK_EXTERNAL_MODULE_node_os_74b4b876__["default"].tmpdir(), (0, __WEBPACK_EXTERNAL_MODULE_node_crypto_9ba42079__.randomUUID)());
     let stepIndex = 0;
     if (isClean) {
-        if ((0, __WEBPACK_EXTERNAL_MODULE_fs__.existsSync)(output)) await __WEBPACK_EXTERNAL_MODULE_fs_promises_400951f8__["default"].rm(output, {
+        if ((0, __WEBPACK_EXTERNAL_MODULE_node_fs_5ea92f0c__.existsSync)(output)) await __WEBPACK_EXTERNAL_MODULE_node_fs_promises_153e37e0__["default"].rm(output, {
             recursive: true
         });
-        await __WEBPACK_EXTERNAL_MODULE_fs_promises_400951f8__["default"].mkdir(output, {
+        await __WEBPACK_EXTERNAL_MODULE_node_fs_promises_153e37e0__["default"].mkdir(output, {
             recursive: true
         });
         console.log(`>> 步骤${++stepIndex}: 清空输出文件夹 - 完成`);
     }
     sourceDs = __WEBPACK_EXTERNAL_MODULE_gdal_async_691d88a0__["default"].open(input, 'r');
     if (sourceDs.srs?.getAuthorityCode() !== epsg) {
-        projectPath = reproject(sourceDs, epsg, resampling);
+        projectPath = await reproject(sourceDs, epsg, resampling);
         projectDs = __WEBPACK_EXTERNAL_MODULE_gdal_async_691d88a0__["default"].open(projectPath, 'r+');
         sourceDs.close();
         console.log(`>> 步骤${++stepIndex}: 重投影至 EPSG:${epsg} - 完成`);
@@ -260,11 +266,11 @@ async function generateTile(input, output, options) {
         miny = dsInfo.endY;
         maxy = dsInfo.startY;
     }
-    let startPoint = [
+    const startPoint = [
         dsInfo.startX,
         maxy
     ];
-    let endPoint = [
+    const endPoint = [
         dsInfo.endX,
         miny
     ];
@@ -279,7 +285,7 @@ async function generateTile(input, output, options) {
             tmaxy: maxRC.row
         };
     }
-    let buffer = 1;
+    const buffer = 1;
     let outTileSize = tileSize;
     if ('mapbox' === encoding) outTileSize = tileSize + 2 * buffer;
     const jobs = [];
@@ -288,9 +294,9 @@ async function generateTile(input, output, options) {
         let overviewInfo;
         if (tz > overViewInfo.maxOverViewsZ) overviewInfo = dsInfo;
         else {
-            let startZ = Math.max(tz, overViewInfo.minOverViewsZ);
+            const startZ = Math.max(tz, overViewInfo.minOverViewsZ);
             const factorZoom = overViewInfo.maxOverViewsZ - startZ;
-            const factor = Math.pow(2, factorZoom + 1);
+            const factor = 2 ** (factorZoom + 1);
             overviewInfo = {
                 index: factorZoom,
                 startX: dsInfo.startX,
@@ -302,7 +308,7 @@ async function generateTile(input, output, options) {
             };
         }
         for(let j = tminx; j <= tmaxx; j++){
-            await __WEBPACK_EXTERNAL_MODULE_fs_promises_400951f8__["default"].mkdir(__WEBPACK_EXTERNAL_MODULE_path__["default"].join(outputDir, tz.toString(), j.toString()), {
+            await __WEBPACK_EXTERNAL_MODULE_node_fs_promises_153e37e0__["default"].mkdir(__WEBPACK_EXTERNAL_MODULE_node_path_c5b9b54f__["default"].join(outputDir, tz.toString(), j.toString()), {
                 recursive: true
             });
             for(let i = tminy; i <= tmaxy; i++){
@@ -333,11 +339,11 @@ async function generateTile(input, output, options) {
     resetStats();
     console.log(`\n>> 步骤${++stepIndex}: 切片 - 完成`);
 }
-const resetStats = ()=>{
+function resetStats() {
     statistics.tileCount = 0;
     statistics.completeCount = 0;
     statistics.levelInfo = {};
-};
+}
 function geoQuery(overviewInfo, ulx, uly, lrx, lry, querysize = 0) {
     const { startX, startY, width, height, resX, resY } = overviewInfo;
     let rx = Math.floor((ulx - startX) / resX + 0.001);
@@ -354,7 +360,7 @@ function geoQuery(overviewInfo, ulx, uly, lrx, lry, querysize = 0) {
     }
     let wx = 0;
     if (rx < 0) {
-        let rxshift = Math.abs(rx);
+        const rxshift = Math.abs(rx);
         wx = Math.floor(+rxshift / rxsize * wxsize);
         wxsize -= wx;
         rxsize -= Math.floor(+rxshift / rxsize * rxsize);

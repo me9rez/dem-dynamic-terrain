@@ -129,4 +129,4 @@ out
 .pnp.*
 
 .rslib
-dist
+dist/

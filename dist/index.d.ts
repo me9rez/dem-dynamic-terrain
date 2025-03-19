@@ -1,6 +1,6 @@
 import type { Dataset } from 'gdal-async';
 
-export declare type CreateInfo = {
+export declare interface CreateInfo {
     outTileSize: number;
     overviewInfo: OverviewInfo;
     rb: {
@@ -23,34 +23,34 @@ export declare type CreateInfo = {
     y: number;
     z: number;
     outputTile: string;
-};
+}
 
-export declare type DsInfo = {
+export declare interface DsInfo {
     ds: Dataset;
     path: string;
-};
+}
 
 /**
  * 生产切片
- * @param tifFilePath TIF 文件路径
- * @param outputDir 输出目录
+ * @param input TIF 文件路径
+ * @param output 输出目录
  * @param options 可选配置
  */
 declare function generateTile(input: string, output: string, options: Options): Promise<void>;
 export default generateTile;
 
-export declare type LevelInfo = {
+export declare interface LevelInfo {
     tminx: number;
     tminy: number;
     tmaxx: number;
     tmaxy: number;
-};
+}
 
-export declare type LevelInfoDict = {
+export declare interface LevelInfoDict {
     [key: number]: LevelInfo;
-};
+}
 
-export declare type Options = {
+export declare interface Options {
     minZoom: number;
     maxZoom: number;
     epsg: number;
@@ -58,9 +58,9 @@ export declare type Options = {
     isClean: boolean;
     resampling: number;
     baseHeight: number;
-};
+}
 
-export declare type OverviewInfo = {
+export declare interface OverviewInfo {
     index?: number;
     startX: number;
     startY: number;
@@ -71,18 +71,18 @@ export declare type OverviewInfo = {
     endX?: number;
     endY?: number;
     path?: string;
-};
+}
 
-export declare type OverviewInfoDict = {
+export declare interface OverviewInfoDict {
     [key: number]: OverviewInfo;
-};
+}
 
-export declare let statistics: StatisticsInfo;
+export declare const statistics: StatisticsInfo;
 
-export declare type StatisticsInfo = {
+export declare interface StatisticsInfo {
     tileCount: number;
     completeCount: number;
     levelInfo: LevelInfoDict;
-};
+}
 
 export { }
