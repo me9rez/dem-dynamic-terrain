@@ -74,8 +74,9 @@ async function recycle() {
 /**
  * 重投影数据集
  */
-function reproject(ds: Dataset, epsg: number, resampling: number) {
+async function reproject(ds: Dataset, epsg: number, resampling: number) {
   const projectDatasetPath = path.join(os.tmpdir(), pkg.tempDir, `${uuid()}.tif`)
+  await fs.mkdir(path.dirname(projectDatasetPath), { recursive: true })
   reprojectImage(ds, projectDatasetPath, epsg, resampling)
   return projectDatasetPath
 }
@@ -152,7 +153,7 @@ async function generateTile(input: string, output: string, options: Options) {
   // #region 步骤 1 - 重投影
   // @ts-expect-error
   if (sourceDs.srs?.getAuthorityCode() !== epsg) {
-    projectPath = reproject(sourceDs, epsg, resampling)
+    projectPath = await reproject(sourceDs, epsg, resampling)
     projectDs = gdal.open(projectPath, 'r+')
     sourceDs.close() // 原始的就不需要了
     console.log(`>> 步骤${++stepIndex}: 重投影至 EPSG:${epsg} - 完成`)
