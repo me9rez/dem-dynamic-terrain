@@ -1,18 +1,7 @@
 {
   "name": "@deepgis/dem-dynamic-terrain",
-  "type": "module",
   "version": "0.0.2",
   "description": "使用 GDAL 制作地形瓦片，支持 mapbox 和 terrarium 两种编码输出格式",
-  "author": "me9rez",
-  "license": "MIT",
-  "homepage": "https://github.com/me9rez/dem-dynamic-terrain",
-  "repository": {
-    "url": "https://github.com/me9rez/dem-dynamic-terrain.git"
-  },
-  "publishConfig": {
-    "access": "public",
-    "registry": "https://registry.npmjs.org/"
-  },
   "keywords": [
     "dem",
     "terrain",
@@ -22,9 +11,13 @@
     "mapbox-gl",
     "maplibre-gl"
   ],
-  "files": [
-    "dist"
-  ],
+  "homepage": "https://github.com/me9rez/dem-dynamic-terrain",
+  "repository": {
+    "url": "https://github.com/me9rez/dem-dynamic-terrain.git"
+  },
+  "license": "MIT",
+  "author": "me9rez",
+  "type": "module",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -34,16 +27,16 @@
   "bin": {
     "dem-dynamic-terrain": "./dist/cli.js"
   },
-  "engines": {
-    "node": ">=22.5"
-  },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsx ./rslib.config.ts",
     "lint": "eslint",
     "lint:fix": "eslint --fix",
-    "test": "tsx ./test/index.ts",
     "prepublishOnly": "pnpm build",
-    "release": "release-it"
+    "release": "release-it",
+    "test": "tsx ./test/index.ts"
   },
   "dependencies": {
     "commander": "^13.1.0",
@@ -60,6 +53,13 @@
     "release-it": "^18.1.2",
     "tsx": "^4.19.3",
     "typescript": "^5.8.2"
+  },
+  "engines": {
+    "node": ">=22.5"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   },
   "pnpm": {
     "onlyBuiltDependencies": [
