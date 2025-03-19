@@ -1,7 +1,7 @@
 {
   "name": "@deepgis/dem-dynamic-terrain",
   "type": "module",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "使用 GDAL 制作地形瓦片，支持 mapbox 和 terrarium 两种编码输出格式",
   "author": "me9rez",
   "license": "MIT",
