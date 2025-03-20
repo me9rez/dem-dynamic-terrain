@@ -6,6 +6,6 @@
         "oxc"
     ],
     "rules": {
-        
+        "no-unused-vars": "off"
     }
 }

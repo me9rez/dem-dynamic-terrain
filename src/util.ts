@@ -1,5 +1,4 @@
 import { randomUUID } from 'node:crypto'
-import path from 'node:path'
 
 function wait(ms: number) {
   return new Promise<void>(r => setTimeout(() => r(), ms))

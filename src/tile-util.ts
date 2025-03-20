@@ -7,7 +7,9 @@ export interface Bound {
   ymax: number
 }
 
-// 切片范围
+/**
+ * 切片范围
+ */
 const tileBoundMap = new Map<EPSG, Bound>()
 
 tileBoundMap.set(3857, {
@@ -35,7 +37,15 @@ tileBoundMap.set(4326, {
   ymax: 90,
 })
 
-// 根据xyz计算对应地理坐标系的地理边界
+/**
+ * 根据xyz计算对应地理坐标系的地理边界
+ * @param z 
+ * @param x 
+ * @param y 
+ * @param offset 
+ * @param bbox 
+ * @returns 
+ */
 function ST_TileEnvelope(z: number, x: number, y: number, offset = 0, bbox = tileBoundMap.get(3857)!) {
   const tile_size = 256.0
   const boundsWidth = bbox.xmax - bbox.xmin
@@ -66,7 +76,13 @@ function ST_TileEnvelope(z: number, x: number, y: number, offset = 0, bbox = til
   return [x1, y1, x2, y2]
 }
 
-// 根据任意地理坐标计算在指定zoom层级下其对应的瓦片行列号
+/**
+ * 根据任意地理坐标计算在指定zoom层级下其对应的瓦片行列号
+ * @param coord 
+ * @param zoom 
+ * @param bbox 
+ * @returns 
+ */
 function getTileByCoors(coord: [number, number], zoom: number, bbox = tileBoundMap.get(3857)!) {
   // 计算coor与bbox左上角坐标
   const left = bbox.xmin

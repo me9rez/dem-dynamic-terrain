@@ -18,15 +18,15 @@ program
   .option('-i, --input <string>', '<必填> 输入 tif 格式的 DEM 文件路径，支持相对路径')
   .option('-o, --output <string>', '<必填> 输出目录，支持相对路径')
   .option('-f, --configFile <File>', '<可选> 通过配置文件执行任务，输入绝对路径，可参考配置模板')
-  .option('-r, --resampling <number>', `<可选> 构建影像金字塔或重投影时设置重采样策略，默认3，1:AVERAGE|
+  .option('-r, --resampling <number>', `<可选> 构建影像金字塔或重投影时设置重采样策略, 默认3, 1:AVERAGE|
   2:BILINEAR|3:CUBIC|
   4:CUBICSPLINE|5:LANCZOS|
   6:MODE|7:NEAREST`, '3')
-  .option('-g, --epsg <number>', '<可选> Tile适用坐标系，3857 | 4490 | 4326', '3857')
+  .option('-g, --epsg <number>', '<可选> Tile适用坐标系, 3857 | 4490 | 4326', '3857')
   .option('-c, --clean', '<可选> 是否清空输出目录', false)
   .option('-z, --zoom <number-number>', '<可选> 指定瓦片的等级生成范围。例如，想生成 7 ~ 12 级的瓦片，则输入 -z 7-12', '5-14')
-  .option('-e, --encoding <string>', '<可选> 指定瓦片的数据编码规则（mapbox 或 terrarium）', 'mapbox')
-  .option('-b, --baseHeight <number>', '<可选> 基准高度，默认0', '0')
+  .option('-e, --encoding <string>', '<可选> 指定瓦片的数据编码规则(mapbox 或 terrarium)', 'mapbox')
+  .option('-b, --baseHeight <number>', '<可选> 基准高度, 默认0', '0')
 
 // --- 解析参数
 program.parse()

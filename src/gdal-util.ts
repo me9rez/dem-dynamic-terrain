@@ -1,7 +1,11 @@
 import type { Dataset, Driver } from 'gdal-async'
 import gdal from 'gdal-async'
 
-// 根据策略获取对应的采样方法
+/**
+ * 根据策略获取对应的采样方法
+ * @param resampling 
+ * @returns 
+ */
 function getBuildOverviewResampling(resampling: number) {
   switch (resampling) {
     case 1:
@@ -62,7 +66,7 @@ function getDriverByName(driverName: string) {
 }
 
 /**
- * @function 栅格重投影
+ * 栅格重投影
  * @description 输入一个源数据，设置投影输出数据文件路径和投影坐标系的epsg编码，设置采样参数，输出栅格重投影文件
  * @param src_ds  输入的栅格文件路径或者gdal的数据集对象。
  * @param reproject_path  输出的重投影后的栅格文件路径。

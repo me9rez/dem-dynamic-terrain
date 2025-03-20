@@ -76,7 +76,9 @@ async function recycle() {
  */
 async function reproject(ds: Dataset, epsg: number, resampling: number) {
   const projectDatasetPath = path.join(os.tmpdir(), pkg.tempDir, `${uuid()}.tif`)
+  // 创建目录
   await fs.mkdir(path.dirname(projectDatasetPath), { recursive: true })
+  // 重投影
   reprojectImage(ds, projectDatasetPath, epsg, resampling)
   return projectDatasetPath
 }
@@ -150,6 +152,7 @@ async function generateTile(input: string, output: string, options: Options) {
     console.log(`>> 步骤${++stepIndex}: 清空输出文件夹 - 完成`)
   }
   sourceDs = gdal.open(input, 'r')
+  
   // #region 步骤 1 - 重投影
   // @ts-expect-error
   if (sourceDs.srs?.getAuthorityCode() !== epsg) {
@@ -163,6 +166,7 @@ async function generateTile(input: string, output: string, options: Options) {
   }
   sourceDs = null
   // #endregion
+
   // #region 步骤 2 - 建立影像金字塔 由于地形通常是30m 90m精度
   const overViewInfo = buildPyramid(projectDs, minZoom, resampling)
   console.log(`>> 步骤${++stepIndex}: 构建影像金字塔索引 - 完成`)
