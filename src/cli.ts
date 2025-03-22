@@ -1,8 +1,10 @@
 import type { Options } from './types'
+
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import process from 'node:process'
 import { Option, program } from 'commander'
+
 import pkg from '../package.json'
 import generateTile from './index'
 

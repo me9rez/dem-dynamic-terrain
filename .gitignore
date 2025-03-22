@@ -130,3 +130,4 @@ out
 
 .rslib
 dist/
+test/terrain

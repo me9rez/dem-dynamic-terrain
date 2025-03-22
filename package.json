@@ -36,20 +36,21 @@
     "lint:fix": "eslint --fix",
     "prepublishOnly": "pnpm build",
     "release": "release-it",
-    "test": "tsx ./test/index.ts"
+    "test": "tsx ./src/cli.ts -i ./test/test.tif -o ./test/terrain"
   },
   "dependencies": {
     "commander": "^13.1.0",
     "gdal-async": "^3.10.2",
-    "tinypool": "^1.0.2"
+    "p-queue": "^8.1.0",
+    "tinypool": "^1.0.2",
+    "yocto-spinner": "^0.2.1"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^4.10.1",
+    "@antfu/eslint-config": "^4.10.2",
     "@microsoft/api-extractor": "^7.52.1",
-    "@rslib/core": "^0.5.4",
-    "@types/node": "^22.13.10",
-    "eslint": "9.22.0",
-    "oxlint": "^0.16.1",
+    "@rslib/core": "^0.5.5",
+    "@types/node": "^22.13.11",
+    "eslint": "9.23.0",
     "release-it": "^18.1.2",
     "tsx": "^4.19.3",
     "typescript": "^5.8.2"
