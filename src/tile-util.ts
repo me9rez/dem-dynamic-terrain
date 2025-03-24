@@ -39,12 +39,11 @@ tileBoundMap.set(4326, {
 
 /**
  * 根据xyz计算对应地理坐标系的地理边界
- * @param z 
- * @param x 
- * @param y 
- * @param offset 
- * @param bbox 
- * @returns 
+ * @param z
+ * @param x
+ * @param y
+ * @param offset
+ * @param bbox
  */
 function ST_TileEnvelope(z: number, x: number, y: number, offset = 0, bbox = tileBoundMap.get(3857)!) {
   const tile_size = 256.0
@@ -78,10 +77,9 @@ function ST_TileEnvelope(z: number, x: number, y: number, offset = 0, bbox = til
 
 /**
  * 根据任意地理坐标计算在指定zoom层级下其对应的瓦片行列号
- * @param coord 
- * @param zoom 
- * @param bbox 
- * @returns 
+ * @param coord
+ * @param zoom
+ * @param bbox
  */
 function getTileByCoors(coord: [number, number], zoom: number, bbox = tileBoundMap.get(3857)!) {
   // 计算coor与bbox左上角坐标

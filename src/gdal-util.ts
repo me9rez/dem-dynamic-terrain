@@ -3,8 +3,7 @@ import gdal from 'gdal-async'
 
 /**
  * 根据策略获取对应的采样方法
- * @param resampling 
- * @returns 
+ * @param resampling
  */
 function getBuildOverviewResampling(resampling: number) {
   switch (resampling) {

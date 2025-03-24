@@ -1,41 +1,33 @@
 import { build, defineConfig } from '@rslib/core'
 
-await build({
-  source: {
-    entry: {
-      index: './src/index.ts',
-    },
-  },
-  output: {
-    target: 'node',
-  },
+export default defineConfig({
   lib: [
     {
+      source: {
+        entry: {
+          index: './src/index.ts',
+        },
+      },
+      output: {
+        target: 'node',
+      },
       format: 'esm',
       dts: {
         bundle: true,
       },
-
     },
-  ],
-})
-
-await build({
-  source: {
-    entry: {
-      'create-tile': './src/create-tile.ts',
-      'cli': './src/cli.ts',
-    },
-  },
-  output: {
-    target: 'node',
-    cleanDistPath: false,
-  },
-  lib: [
     {
+      source: {
+        entry: {
+          'create-tile': './src/create-tile.ts',
+          'cli': './src/cli.ts',
+        },
+      },
+      output: {
+        target: 'node',
+      },
       format: 'esm',
       dts: false,
-
     },
   ],
 })
