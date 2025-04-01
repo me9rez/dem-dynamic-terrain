@@ -8,6 +8,7 @@ export interface Options {
   isClean: boolean
   resampling: number
   baseHeight: number
+  type: 'terrain' | 'dom'
 }
 
 export interface LevelInfo {
@@ -60,4 +61,5 @@ export interface CreateInfo {
   y: number
   z: number
   outputTile: string
+  type: 'terrain' | 'dom'
 }

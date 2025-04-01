@@ -28,6 +28,5 @@
     "verbatimModuleSyntax": true,
     "skipLibCheck": true
 
-  },
-  "include": ["src"]
+  }
 }

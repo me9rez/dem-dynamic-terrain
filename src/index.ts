@@ -22,8 +22,17 @@ import { getBuildOverviewResampling, reprojectImage } from './gdal-util'
 import { getTileByCoors, ST_TileEnvelope, tileBoundMap } from './tile-util'
 import { uuid } from './util'
 
+function getWorkerPath() {
+  if (import.meta.env.MODE === 'development') {
+    return new URL('./create-tile.ts', import.meta.url).href
+  }
+  else {
+    return new URL('./create-tile.js', import.meta.url).href
+  }
+}
+
 const pool = new Tinypool({
-  filename: new URL('./create-tile.js', import.meta.url).href,
+  filename: getWorkerPath(),
   runtime: 'child_process',
 })
 
@@ -82,6 +91,7 @@ async function recycle() {
  * 重投影数据集
  */
 async function reproject(ds: Dataset, epsg: number, resampling: number) {
+  // 临时重投影tif文件路径
   const projectDatasetPath = path.join(
     os.tmpdir(),
     pkg.tempDir,
@@ -126,6 +136,7 @@ function buildPyramid(ds: gdal.Dataset, minZoom: number, resampling: number) {
   }
   const buildOverviewResampling = getBuildOverviewResampling(resampling)
   ds.buildOverviews(buildOverviewResampling, overviews)
+
   // z>=originZ使用原始影像
   return {
     maxOverViewsZ: originZ - 1, // 大于该值用原始影像
@@ -140,6 +151,8 @@ function buildPyramid(ds: gdal.Dataset, minZoom: number, resampling: number) {
  * @param options 可选配置
  */
 async function generateTile(input: string, output: string, options: Options) {
+  // 切片类型
+  const type = options.type
   // 结构可选参数
   const { minZoom, maxZoom, epsg, encoding, isClean, resampling } = options
   // 固定瓦片尺寸
@@ -178,7 +191,6 @@ async function generateTile(input: string, output: string, options: Options) {
   }
   sourceDs = null
   // #endregion
-
   // #region 步骤 2 - 建立影像金字塔 由于地形通常是30m 90m精度
   const overViewInfo = buildPyramid(projectDs, minZoom, resampling)
   console.log(`- 步骤${++stepIndex}: 构建影像金字塔索引 - 完成`)
@@ -217,8 +229,7 @@ async function generateTile(input: string, output: string, options: Options) {
   for (let tz = minZoom; tz <= maxZoom; ++tz) {
     const minRC = getTileByCoors(startPoint, tz, tileBoundTool)
     const maxRC = getTileByCoors(endPoint, tz, tileBoundTool)
-    statistics.tileCount += (maxRC.row - minRC.row + 1)
-      * (maxRC.column - minRC.column + 1)
+    statistics.tileCount += (maxRC.row - minRC.row + 1) * (maxRC.column - minRC.column + 1)
     statistics.levelInfo[tz] = {
       tminx: minRC.column,
       tminy: minRC.row,
@@ -232,6 +243,9 @@ async function generateTile(input: string, output: string, options: Options) {
   let outTileSize = tileSize
   if (encoding === 'mapbox') {
     outTileSize = tileSize + buffer * 2
+  }
+  if (type === 'dom') {
+    outTileSize = tileSize
   }
 
   const spinner = yoctoSpinner({ text: `步骤${++stepIndex}: 开始准备切片队列 - 完成` }).start()
@@ -312,6 +326,7 @@ async function generateTile(input: string, output: string, options: Options) {
           y: i,
           z: tz,
           outputTile: outputDir,
+          type,
         }
         pileUpCount++
         // 加入队列

@@ -19,6 +19,7 @@ program.name(pkg.name)
 program
   .option('-i, --input <string>', '<必填> 输入 tif 格式的 DEM 文件路径，支持相对路径')
   .option('-o, --output <string>', '<必填> 输出目录，支持相对路径')
+  .option('-t, --type <string>', '<必填> 切片类型, terrain 或 dom', 'terrain')
   .option('-f, --configFile <File>', '<可选> 通过配置文件执行任务，输入绝对路径，可参考配置模板')
   .option('-r, --resampling <number>', `<可选> 构建影像金字塔或重投影时设置重采样策略, 默认3, 1:AVERAGE|
   2:BILINEAR|3:CUBIC|
@@ -41,6 +42,7 @@ if (options.configFile)
 else
   params = options
 
+const type = params.type as 'terrain' | 'dom'
 const inputDem = params.input
 const outputDir = params.output
 if (inputDem === undefined || outputDir === undefined) {
@@ -79,6 +81,7 @@ const logMsg = `\n>> 开始转换...
 - 瓦片尺寸: 256 px
 - 瓦片等级: ${minZoom} 至 ${maxZoom} 级
 - 基准高度: ${baseHeight}
+- 切片类型: ${type}
 `
 console.log(logMsg)
 
@@ -90,6 +93,7 @@ const args: Options = {
   isClean,
   baseHeight,
   resampling: params.resampling,
+  type,
 }
 
 await generateTile(inputDem, outputDir, args)
