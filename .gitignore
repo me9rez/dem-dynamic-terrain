@@ -131,4 +131,5 @@ out
 .rslib
 dist/
 test/terrain
+test/terrain2
 test/dom

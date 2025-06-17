@@ -106,13 +106,13 @@ function reprojectImage(src_ds: string | Dataset, reproject_path: string, t_epsg
   gdal.reprojectImage({ src: s_ds, dst: t_ds, s_srs, t_srs, resampling: gdal_resampling })
   // 复制源数据的nodata值到目标数据
   const bands = s_ds.bands.count()
-  console.log(`原始数据波段数：${bands}`)
+  // console.log(`原始数据波段数：${bands}`)
   for (let i = 0; i < bands; i++) {
     const s_band = s_ds.bands.get(i + 1)
     const t_band = t_ds.bands.get(i + 1)
     t_band.noDataValue = s_band.noDataValue
     const dataType = s_band.dataType
-    console.log(`第${i + 1}波段数据类型: ${dataType}`)
+    // console.log(`第${i + 1}波段数据类型: ${dataType}`)
   }
   // t_ds.bands.get(1).noDataValue = s_ds.bands.get(1).noDataValue
   // 关闭退出

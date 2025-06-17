@@ -6,7 +6,7 @@ import process from 'node:process'
 import { Option, program } from 'commander'
 
 import pkg from '../package.json'
-import generateTile from './index'
+import { TIF2Tiles } from './index'
 
 const version = pkg.version
 
@@ -94,6 +94,8 @@ const args: Options = {
   baseHeight,
   resampling: params.resampling,
   type,
+  log: true,
 }
 
-await generateTile(inputDem, outputDir, args)
+const tif2Tiles = new TIF2Tiles(inputDem, outputDir, args)
+await tif2Tiles.generateTile()

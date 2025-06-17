@@ -9,6 +9,7 @@ export interface Options {
   resampling: number
   baseHeight: number
   type: 'terrain' | 'dom'
+  log: boolean
 }
 
 export interface LevelInfo {
