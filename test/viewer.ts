@@ -13,8 +13,8 @@ const map = new Map({
   layers: [
     new TileLayer({
       source: new ImageTile({
-        // url: './terrain/{z}/{x}/{y}.png',
-        url: './dom/{z}/{x}/{y}.png',
+        url: './terrain/{z}/{x}/{y}.png',
+        // url: './dom/{z}/{x}/{y}.png',
       }),
     }),
   ],

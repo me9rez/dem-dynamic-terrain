@@ -63,7 +63,9 @@ function writeTerrainTile(
   else {
     readband = readinfo.ds!.bands.get(1).overviews.get(overviewInfo.index)
   }
-  const dataType = readband.dataType
+  let dataType = readband.dataType
+  // console.log(dataType)
+
   let heightBuffer
   if (dataType === gdal.GDT_Int16) {
     heightBuffer = new Int16Array(writeinfo.wxsize * writeinfo.wysize)
@@ -71,8 +73,9 @@ function writeTerrainTile(
   else if (dataType === gdal.GDT_Float32) {
     heightBuffer = new Float32Array(writeinfo.wxsize * writeinfo.wysize)
   }
-  else if (dataType === gdal.GDT_Byte) {
+  else if (dataType === 'Int8' || dataType === gdal.GDT_Byte) {
     heightBuffer = new Uint8Array(writeinfo.wxsize * writeinfo.wysize)
+    dataType = gdal.GDT_Byte
   }
 
   readband.pixels.read(
