@@ -52,16 +52,16 @@
     "yocto-spinner": "^1.0.0"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^5.0.0",
-    "@microsoft/api-extractor": "^7.52.9",
-    "@rsbuild/core": "^1.4.11",
-    "@rslib/core": "^0.11.0",
-    "@types/node": "^24.1.0",
-    "eslint": "9.32.0",
+    "@antfu/eslint-config": "^5.2.1",
+    "@microsoft/api-extractor": "^7.52.10",
+    "@rsbuild/core": "^1.4.15",
+    "@rslib/core": "^0.12.1",
+    "@types/node": "^24.3.0",
+    "eslint": "9.33.0",
     "ol": "^10.6.1",
     "release-it": "^19.0.4",
-    "tsx": "^4.20.3",
-    "typescript": "^5.8.3"
+    "tsx": "^4.20.4",
+    "typescript": "^5.9.2"
   },
   "publishConfig": {
     "access": "public",
